@@ -1,0 +1,5 @@
+cc.loptions =+ "-L$out_base/../..."
+
+import libs += libgtest_main%lib{gtest_main}
+
+exe{googletest-death-test-test}: cxx{googletest-death-test-test.cc} $libs

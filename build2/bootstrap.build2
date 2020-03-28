@@ -1,0 +1,7 @@
+project = googletest
+
+using version
+using config
+using test
+using install
+using dist

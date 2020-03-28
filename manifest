@@ -1,0 +1,11 @@
+: 1
+name: googletest
+version: 0.1.0-a.0.z
+summary: googletest C++ library
+license: BSD3 ; New 3-clause BSD License.
+description-file: README.md
+url: https://example.org/googletest
+email: you@example.org
+depends: * build2 >= 0.12.0
+depends: * bpkg >= 0.12.0
+#depends: libhello ^1.0.0

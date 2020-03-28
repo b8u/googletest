@@ -1,0 +1,6 @@
+$out_root/
+{
+  include googletest/
+}
+
+export $out_root/googletest/$import.target

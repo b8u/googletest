@@ -1,0 +1,60 @@
+lib{gtest}: {cxx}{src/gtest-all}
+
+lib{gtest_main}: {cxx}{src/gtest_main.cc} libgtest%lib{gtest}
+
+cc.poptions =+ "-I$src_base/include"
+cc.poptions =+ "-I$src_base" # gtest-all.cc includes *.cc files.
+
+# Looks like build2 can't automatically detect a dependency
+# declared in the same file.
+# The next line just for `gtest_main`.
+cc.loptions =+ "-L$out_base" 
+
+./: lib{gtest} lib{gtest_main} dir{test}
+
+
+#### # Include the generated version header into the distribution (so that we don't
+#### # pick up an installed one) and don't remove it when cleaning in src (so that
+#### # clean results in a state identical to distributed).
+#### #
+#### hxx{version}: in{version} $src_root/manifest
+#### {
+####   dist  = true
+####   clean = ($src_root != $out_root)
+#### }
+#### 
+#### # Build options.
+#### #
+#### cxx.poptions =+ "-I$out_root" "-I$src_root"
+#### 
+#### obja{*}: cxx.poptions += -DGOOGLETEST_STATIC_BUILD
+#### objs{*}: cxx.poptions += -DGOOGLETEST_SHARED_BUILD
+#### 
+#### # Export options.
+#### #
+#### lib{googletest}:
+#### {
+####   cxx.export.poptions = "-I$out_root" "-I$src_root"
+####   cxx.export.libs = $int_libs
+#### }
+#### 
+#### liba{googletest}: cxx.export.poptions += -DGOOGLETEST_STATIC
+#### libs{googletest}: cxx.export.poptions += -DGOOGLETEST_SHARED
+#### 
+#### # For pre-releases use the complete version to make sure they cannot be used
+#### # in place of another pre-release or the final version. See the version module
+#### # for details on the version.* variable values.
+#### #
+#### if $version.pre_release
+####   lib{googletest}: bin.lib.version = @"-$version.project_id"
+#### else
+####   lib{googletest}: bin.lib.version = @"-$version.major.$version.minor"
+#### 
+#### # Install into the googletest/ subdirectory of, say, /usr/include/
+#### # recreating subdirectories.
+#### #
+#### {hxx ixx txx}{*}:
+#### {
+####   install         = include/googletest/
+####   install.subdirs = true
+#### }

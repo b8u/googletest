@@ -1,0 +1,5 @@
+project = googletest
+
+using version
+using test
+using install
